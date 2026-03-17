@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Swagot — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f7f5f0;
+      --ink: #1a1a18;
+      --muted: #7a7a72;
+      --accent: #c84b2f;
+      --border: #e0ddd6;
+      --card: #ffffff;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.4rem 3rem;
+      background: rgba(247,245,240,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.2rem;
+      letter-spacing: -0.02em;
+    }
+    .nav-links { display: flex; gap: 2.2rem; list-style: none; }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.85rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--ink); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 0 3rem 5rem;
+      position: relative;
+    }
+    .hero-eyebrow {
+      font-size: 0.8rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.2rem;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.2s;
+    }
+    .hero-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(3.5rem, 9vw, 8rem);
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.8rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 0.4s;
+    }
+    .hero-name em {
+      font-style: italic;
+      color: var(--muted);
+    }
+    .hero-tagline {
+      max-width: 480px;
+      font-size: 1.05rem;
+      color: var(--muted);
+      line-height: 1.7;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 0.6s;
+    }
+    .hero-scroll {
+      position: absolute; bottom: 2.5rem; right: 3rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      writing-mode: vertical-rl;
+      display: flex; align-items: center; gap: 0.6rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 1s;
+    }
+    .hero-scroll::before {
+      content: '';
+      display: block;
+      width: 1px; height: 48px;
+      background: var(--muted);
+    }
+
+    /* ── SECTION BASE ── */
+    section { padding: 6rem 3rem; }
+    .section-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.8rem;
+    }
+    .section-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 3rem;
+    }
+
+    /* ── ABOUT ── */
+    #about { border-top: 1px solid var(--border); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .about-meta { display: flex; flex-direction: column; gap: 1.5rem; }
+    .about-stat { border-top: 1px solid var(--border); padding-top: 1rem; }
+    .about-stat span {
+      display: block;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.3rem;
+    }
+    .about-stat strong { font-size: 1rem; font-weight: 500; }
+    .about-text p {
+      font-size: 1.05rem;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 1.2rem;
+    }
+    .about-text p:last-child { margin-bottom: 0; }
+
+    /* ── PROJECTS ── */
+    #projects { border-top: 1px solid var(--border); background: var(--card); }
+    .projects-list { display: flex; flex-direction: column; gap: 0; }
+    .project-item {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 2rem;
+      padding: 2.2rem 0;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.25s ease;
+      cursor: pointer;
+    }
+    .project-item:hover { padding-left: 1.2rem; }
+    .project-item:hover .proj-num { color: var(--accent); }
+    .proj-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 0.85rem;
+      color: var(--border);
+      transition: color 0.25s;
+      min-width: 2.5rem;
+    }
+    .proj-info {}
+    .proj-title { font-size: 1.2rem; font-weight: 500; margin-bottom: 0.3rem; }
+    .proj-desc { font-size: 0.9rem; color: var(--muted); }
+    .proj-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .tag {
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.7rem;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      color: var(--muted);
+    }
+    .project-item:hover .tag { border-color: var(--accent); color: var(--accent); }
+
+    /* ── SKILLS ── */
+    #skills { border-top: 1px solid var(--border); }
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1px;
+      border: 1px solid var(--border);
+    }
+    .skill-cell {
+      padding: 1.8rem;
+      background: var(--card);
+      border: none;
+    }
+    .skill-cell span {
+      display: block;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+    .skill-cell strong { font-size: 1rem; font-weight: 400; }
+
+    /* ── CONTACT ── */
+    #contact {
+      border-top: 1px solid var(--border);
+      background: var(--ink);
+      color: var(--bg);
+    }
+    #contact .section-label { color: #c84b2f; }
+    #contact .section-title { color: var(--bg); }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .contact-desc {
+      font-size: 1rem;
+      color: rgba(247,245,240,0.55);
+      line-height: 1.8;
+    }
+    .contact-links { display: flex; flex-direction: column; gap: 1.2rem; }
+    .contact-link {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 0;
+      border-bottom: 1px solid rgba(247,245,240,0.1);
+      text-decoration: none;
+      color: var(--bg);
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
+    .contact-link:hover { padding-left: 0.8rem; color: var(--accent); }
+    .contact-link .arrow { font-size: 1.2rem; opacity: 0.4; }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 1.5rem 3rem;
+      background: var(--ink);
+      border-top: 1px solid rgba(247,245,240,0.08);
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: rgba(247,245,240,0.3);
+      letter-spacing: 0.04em;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .nav-links { gap: 1.4rem; }
+      section { padding: 4rem 1.5rem; }
+      #hero { padding: 0 1.5rem 4rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .hero-scroll { display: none; }
+      footer { flex-direction: column; gap: 0.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">Swagot</div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <p class="hero-eyebrow">IT Student · Builder · Creator</p>
+    <h1 class="hero-name">Swagot<br><em>Majumder</em></h1>
+    <p class="hero-tagline">I build things at the intersection of technology, art, and ideas. Currently studying Information Technology — always working on something.</p>
+    <div class="hero-scroll">Scroll</div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <p class="section-label reveal">About</p>
+    <div class="about-grid">
+      <div class="about-meta reveal">
+        <div class="about-stat">
+          <span>Currently</span>
+          <strong>B.Sc. Information Technology</strong>
+        </div>
+        <div class="about-stat">
+          <span>Interests</span>
+          <strong>AI · Film · Photography · Robotics</strong>
+        </div>
+        <div class="about-stat">
+          <span>Camera</span>
+          <strong>Canon EOS 1500D</strong>
+        </div>
+        <div class="about-stat">
+          <span>Based in</span>
+          <strong>India</strong>
+        </div>
+      </div>
+      <div class="about-text reveal">
+        <p>I'm Swagot — an IT student with a wide orbit of curiosity. I move between code, cameras, and concepts without apology.</p>
+        <p>My interests span AI, filmmaking, photography, hacking, robotics, and the politics that shape the world around all of it. I believe that the best builders understand both technology and the human systems it exists within.</p>
+        <p>I'm at an early stage — figuring out which of the things I love deserves the deepest focus. This portfolio is a live document of that process.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <p class="section-label reveal">Projects</p>
+    <h2 class="section-title reveal">Selected Work</h2>
+    <div class="projects-list">
+
+      <div class="project-item reveal">
+        <span class="proj-num">01</span>
+        <div class="proj-info">
+          <div class="proj-title">Project Name Here</div>
+          <div class="proj-desc">Short description of what this project does and why it matters.</div>
+        </div>
+        <div class="proj-tags">
+          <span class="tag">Python</span>
+          <span class="tag">AI</span>
+        </div>
+      </div>
+
+      <div class="project-item reveal">
+        <span class="proj-num">02</span>
+        <div class="proj-info">
+          <div class="proj-title">Project Name Here</div>
+          <div class="proj-desc">Short description of what this project does and why it matters.</div>
+        </div>
+        <div class="proj-tags">
+          <span class="tag">Web</span>
+          <span class="tag">Design</span>
+        </div>
+      </div>
+
+      <div class="project-item reveal">
+        <span class="proj-num">03</span>
+        <div class="proj-info">
+          <div class="proj-title">Project Name Here</div>
+          <div class="proj-desc">Short description of what this project does and why it matters.</div>
+        </div>
+        <div class="proj-tags">
+          <span class="tag">Photography</span>
+          <span class="tag">Visual</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <p class="section-label reveal">Skills</p>
+    <h2 class="section-title reveal">What I Work With</h2>
+    <div class="skills-grid reveal">
+      <div class="skill-cell"><span>Language</span><strong>Python</strong></div>
+      <div class="skill-cell"><span>Frontend</span><strong>HTML / CSS / JS</strong></div>
+      <div class="skill-cell"><span>Domain</span><strong>AI & Machine Learning</strong></div>
+      <div class="skill-cell"><span>Hardware</span><strong>Robotics</strong></div>
+      <div class="skill-cell"><span>Creative</span><strong>Photography</strong></div>
+      <div class="skill-cell"><span>Creative</span><strong>Filmmaking</strong></div>
+      <div class="skill-cell"><span>OS</span><strong>Windows / Linux</strong></div>
+      <div class="skill-cell"><span>Security</span><strong>Hacking & CTF</strong></div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <p class="section-label reveal">Contact</p>
+    <h2 class="section-title reveal">Let's Talk</h2>
+    <div class="contact-grid">
+      <p class="contact-desc reveal">Whether it's a project, a collaboration, or just a conversation worth having — reach out. I respond to interesting people.</p>
+      <div class="contact-links reveal">
+        <a href="mailto:your@email.com" class="contact-link">
+          Email <span class="arrow">↗</span>
+        </a>
+        <a href="https://github.com/yourusername" class="contact-link" target="_blank">
+          GitHub <span class="arrow">↗</span>
+        </a>
+        <a href="https://linkedin.com/in/yourusername" class="contact-link" target="_blank">
+          LinkedIn <span class="arrow">↗</span>
+        </a>
+        <a href="https://twitter.com/yourusername" class="contact-link" target="_blank">
+          Twitter / X <span class="arrow">↗</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>© 2026 Swagot Majumder</span>
+    <span>Designed & built with intent.</span>
+  </footer>
+
+  <script>
+    // Intersection Observer for reveal animations
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
