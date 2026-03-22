@@ -288,6 +288,8 @@
       .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
       .hero-scroll { display: none; }
       footer { flex-direction: column; gap: 0.4rem; }
+      .project-item { grid-template-columns: auto 1fr; }
+      .proj-tags { display: none; }
     }
   </style>
 </head>
@@ -298,6 +300,7 @@
     <div class="nav-logo">Swagot</div>
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
       <li><a href="#skills">Skills</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
@@ -341,6 +344,28 @@
     </div>
   </section>
 
+  <!-- PROJECTS -->
+  <section id="projects">
+    <p class="section-label reveal">Projects</p>
+    <h2 class="section-title reveal">Things I've Built</h2>
+    <div class="projects-list reveal">
+
+      <a href="https://swagot-saikia.github.io/Photography/" target="_blank" class="project-item">
+        <span class="proj-num">01</span>
+        <div class="proj-info">
+          <div class="proj-title">Photography Portfolio</div>
+          <div class="proj-desc">A curated visual archive — landscape, street, portrait, and abstract photography shot on a Canon EOS 1500D.</div>
+        </div>
+        <div class="proj-tags">
+          <span class="tag">Photography</span>
+          <span class="tag">HTML / CSS</span>
+          <span class="tag">Creative</span>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
   <!-- SKILLS -->
   <section id="skills">
     <p class="section-label reveal">Skills</p>
@@ -364,7 +389,7 @@
     <div class="contact-grid">
       <p class="contact-desc reveal">Whether it's a project, a collaboration, or just a conversation worth having — reach out. I respond to interesting people.</p>
       <div class="contact-links reveal">
-        <a href="exceptionalstudio211@gmail.com" class="contact-link">
+        <a href="mailto:exceptionalstudio211@gmail.com" class="contact-link">
           Email <span class="arrow">↗</span>
         </a>
         <a href="https://github.com/Swagot-Saikia" class="contact-link" target="_blank">
