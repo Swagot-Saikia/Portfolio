@@ -3,423 +3,1091 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Swagot — Portfolio</title>
+  <title>Swagot Saikia — Tech Auteur</title>
+
+  <!--
+    FONT STRATEGY:
+    - Bebas Neue: cinematic display — feels like a title card, not a template
+    - Lora: editorial serif for body — warmth, intelligence, not sterile
+    - Syne Mono: for labels/code — technical without being cold
+    These three together are unusual. That's intentional.
+  -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lora:ital,wght@0,400;0,500;1,400&family=Syne+Mono&display=swap" rel="stylesheet">
+
   <style>
+    /* ═══════════════════════════════════════════════
+       DESIGN TOKENS
+       Commit to your palette. These are the only colors.
+       Film noir base + warm amber + blood red accent.
+    ═══════════════════════════════════════════════ */
+    :root {
+      --black:   #0a0a08;      /* base — deeper than #000, warmer */
+      --dark:    #111110;      /* card backgrounds */
+      --mid:     #1e1d1b;      /* borders, dividers */
+      --dust:    #3a3834;      /* secondary text bg */
+      --muted:   #7a7669;      /* secondary text */
+      --warm:    #c4b99a;      /* warm body text */
+      --white:   #f0ece3;      /* primary text */
+      --amber:   #e8a838;      /* primary accent — film light */
+      --red:     #c0392b;      /* secondary accent — danger, passion */
+
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-body: 'Lora', serif;
+      --font-mono: 'Syne Mono', monospace;
+    }
+
+    /* ═══════════════════════════════════════════════
+       RESET & BASE
+    ═══════════════════════════════════════════════ */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --bg: #f7f5f0;
-      --ink: #1a1a18;
-      --muted: #7a7a72;
-      --accent: #c84b2f;
-      --border: #e0ddd6;
-      --card: #ffffff;
+    html {
+      scroll-behavior: smooth;
+      /* Custom scrollbar — the details matter */
+      scrollbar-width: thin;
+      scrollbar-color: var(--dust) var(--black);
     }
-
-    html { scroll-behavior: smooth; }
 
     body {
-      background: var(--bg);
-      color: var(--ink);
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 300;
-      line-height: 1.6;
+      background: var(--black);
+      color: var(--warm);
+      font-family: var(--font-body);
+      line-height: 1.7;
       overflow-x: hidden;
+
+      /*
+        GRAIN OVERLAY: This single texture changes everything.
+        It makes the dark background feel tactile, analog, filmic —
+        not like a dark mode bootstrap template.
+      */
+      background-image:
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
     }
 
-    /* ── NAV ── */
+    /* ═══════════════════════════════════════════════
+       FILM LEADER — The animated intro
+       This plays once on load. It's 2 seconds and people
+       will remember it. That's the entire point.
+    ═══════════════════════════════════════════════ */
+    #film-leader {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: var(--black);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: leaderFade 0.5s ease 1.8s forwards;
+      pointer-events: none; /* don't block interaction after fade */
+    }
+
+    #film-leader svg {
+      animation: leaderPulse 1.6s steps(1) forwards;
+    }
+
+    @keyframes leaderPulse {
+      0%   { opacity: 1; }
+      20%  { opacity: 0; }
+      35%  { opacity: 1; }
+      50%  { opacity: 0; }
+      65%  { opacity: 1; }
+      80%  { opacity: 0; }
+      100% { opacity: 0; }
+    }
+
+    @keyframes leaderFade {
+      to { opacity: 0; visibility: hidden; }
+    }
+
+    .leader-circle {
+      fill: none;
+      stroke: var(--amber);
+      stroke-width: 2;
+    }
+
+    .leader-count {
+      fill: var(--white);
+      font-family: var(--font-display);
+      font-size: 120px;
+      text-anchor: middle;
+      dominant-baseline: central;
+    }
+
+    /* ═══════════════════════════════════════════════
+       NAV
+    ═══════════════════════════════════════════════ */
     nav {
-      position: fixed; top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 1.4rem 3rem;
-      background: rgba(247,245,240,0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 500;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 3rem;
+
+      /* Subtle frosted glass — not the overdone blur everyone does,
+         but dark + barely blurred so it reads like a viewfinder */
+      background: rgba(10,10,8,0.85);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--mid);
     }
+
     .nav-logo {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.2rem;
-      letter-spacing: -0.02em;
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      letter-spacing: 0.08em;
+      color: var(--white);
     }
-    .nav-links { display: flex; gap: 2.2rem; list-style: none; }
+
+    .nav-logo span {
+      color: var(--amber);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
     .nav-links a {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
       text-decoration: none;
       color: var(--muted);
-      font-size: 0.85rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
       transition: color 0.2s;
     }
-    .nav-links a:hover { color: var(--ink); }
 
-    /* ── HERO ── */
+    .nav-links a:hover { color: var(--amber); }
+
+    /* ═══════════════════════════════════════════════
+       HERO
+       The hero does one thing: it makes you stop.
+       Large display type, a positioning line, and negative space.
+       No gradient mesh. No blobs. No "hello world" bootstrap garbage.
+    ═══════════════════════════════════════════════ */
     #hero {
       min-height: 100vh;
-      display: flex; flex-direction: column; justify-content: flex-end;
-      padding: 0 3rem 5rem;
+      padding: 0 3rem;
+      display: grid;
+      grid-template-rows: 1fr auto;
+      align-items: end;
+      padding-bottom: 5rem;
+      padding-top: 6rem;
       position: relative;
+      overflow: hidden;
     }
-    .hero-eyebrow {
-      font-size: 0.8rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 1.2rem;
-      opacity: 0;
-      animation: fadeUp 0.7s ease forwards 0.2s;
-    }
-    .hero-name {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(3.5rem, 9vw, 8rem);
-      line-height: 0.95;
-      letter-spacing: -0.03em;
-      margin-bottom: 1.8rem;
-      opacity: 0;
-      animation: fadeUp 0.8s ease forwards 0.4s;
-    }
-    .hero-name em {
-      font-style: italic;
-      color: var(--muted);
-    }
-    .hero-tagline {
-      max-width: 480px;
-      font-size: 1.05rem;
-      color: var(--muted);
-      line-height: 1.7;
-      opacity: 0;
-      animation: fadeUp 0.8s ease forwards 0.6s;
-    }
-    .hero-scroll {
-      position: absolute; bottom: 2.5rem; right: 3rem;
-      font-size: 0.75rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      writing-mode: vertical-rl;
-      display: flex; align-items: center; gap: 0.6rem;
-      opacity: 0;
-      animation: fadeUp 0.8s ease forwards 1s;
-    }
-    .hero-scroll::before {
+
+    /* Horizontal film strip lines — atmosphere, not decoration */
+    #hero::before {
       content: '';
-      display: block;
-      width: 1px; height: 48px;
-      background: var(--muted);
+      position: absolute;
+      top: 30%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--mid);
+      opacity: 0.6;
     }
 
-    /* ── SECTION BASE ── */
-    section { padding: 6rem 3rem; }
-    .section-label {
-      font-size: 0.75rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 0.8rem;
-    }
-    .section-title {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(2rem, 5vw, 3.2rem);
-      line-height: 1.1;
-      letter-spacing: -0.02em;
-      margin-bottom: 3rem;
+    #hero::after {
+      content: '';
+      position: absolute;
+      bottom: 20%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--mid);
+      opacity: 0.4;
     }
 
-    /* ── ABOUT ── */
-    #about { border-top: 1px solid var(--border); }
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1.6fr;
-      gap: 4rem;
-      align-items: start;
-    }
-    .about-meta { display: flex; flex-direction: column; gap: 1.5rem; }
-    .about-stat { border-top: 1px solid var(--border); padding-top: 1rem; }
-    .about-stat span {
-      display: block;
-      font-size: 0.75rem;
-      letter-spacing: 0.08em;
+    .hero-label {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 0.3rem;
+      color: var(--amber);
+      margin-bottom: 1.6rem;
+      opacity: 0;
+      animation: slideIn 0.6s ease forwards 2s;
     }
-    .about-stat strong { font-size: 1rem; font-weight: 500; }
-    .about-text p {
+
+    /* The counter at top-right of hero — like a frame counter */
+    .hero-frame-count {
+      position: absolute;
+      top: 7rem;
+      right: 3rem;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--dust);
+      letter-spacing: 0.1em;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.4rem;
+    }
+
+    .hero-frame-count .counter {
+      font-size: 2.5rem;
+      color: var(--mid);
+      font-family: var(--font-display);
+      letter-spacing: 0.05em;
+      line-height: 1;
+    }
+
+    /*
+      HEADLINE SIZE: clamp() so it's never too big or too small.
+      8rem on large screens is intentional — it should dominate.
+      First word in white, second in italic amber — that contrast
+      is your logo, your identity, your visual signature.
+    */
+    .hero-headline {
+      font-family: var(--font-display);
+      font-size: clamp(4rem, 11vw, 9.5rem);
+      line-height: 0.92;
+      letter-spacing: 0.01em;
+      color: var(--white);
+      margin-bottom: 2.4rem;
+      opacity: 0;
+      animation: slideIn 0.8s ease forwards 2.2s;
+    }
+
+    .hero-headline .amber { color: var(--amber); }
+    .hero-headline .italic { font-style: italic; }
+
+    .hero-sub {
+      max-width: 560px;
       font-size: 1.05rem;
       color: var(--muted);
+      font-style: italic;
       line-height: 1.8;
-      margin-bottom: 1.2rem;
+      opacity: 0;
+      animation: slideIn 0.8s ease forwards 2.5s;
     }
-    .about-text p:last-child { margin-bottom: 0; }
 
-    /* ── PROJECTS ── */
-    #projects { border-top: 1px solid var(--border); background: var(--card); }
-    .projects-list { display: flex; flex-direction: column; gap: 0; }
-    .project-item {
-      display: grid;
-      grid-template-columns: auto 1fr auto;
+    .hero-actions {
+      display: flex;
       align-items: center;
       gap: 2rem;
-      padding: 2.2rem 0;
-      border-bottom: 1px solid var(--border);
+      margin-top: 2.5rem;
+      opacity: 0;
+      animation: slideIn 0.8s ease forwards 2.8s;
+    }
+
+    .btn-primary {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
       text-decoration: none;
-      color: inherit;
-      transition: all 0.25s ease;
-      cursor: pointer;
-    }
-    .project-item:hover { padding-left: 1.2rem; }
-    .project-item:hover .proj-num { color: var(--accent); }
-    .proj-num {
-      font-family: 'DM Serif Display', serif;
-      font-size: 0.85rem;
-      color: var(--border);
-      transition: color 0.25s;
-      min-width: 2.5rem;
-    }
-    .proj-info {}
-    .proj-title { font-size: 1.2rem; font-weight: 500; margin-bottom: 0.3rem; }
-    .proj-desc { font-size: 0.9rem; color: var(--muted); }
-    .proj-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-    .tag {
-      font-size: 0.72rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      padding: 0.25rem 0.7rem;
-      border: 1px solid var(--border);
-      border-radius: 100px;
-      color: var(--muted);
-    }
-    .project-item:hover .tag { border-color: var(--accent); color: var(--accent); }
-
-    /* ── SKILLS ── */
-    #skills { border-top: 1px solid var(--border); }
-    .skills-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 1px;
-      border: 1px solid var(--border);
-    }
-    .skill-cell {
-      padding: 1.8rem;
-      background: var(--card);
+      color: var(--black);
+      background: var(--amber);
+      padding: 0.85rem 2rem;
       border: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
     }
-    .skill-cell span {
-      display: block;
-      font-size: 0.72rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 0.5rem;
-    }
-    .skill-cell strong { font-size: 1rem; font-weight: 400; }
 
-    /* ── CONTACT ── */
-    #contact {
-      border-top: 1px solid var(--border);
-      background: var(--ink);
-      color: var(--bg);
+    .btn-primary:hover {
+      background: var(--white);
+      transform: translateY(-2px);
     }
-    #contact .section-label { color: #c84b2f; }
-    #contact .section-title { color: var(--bg); }
-    .contact-grid {
+
+    .btn-ghost {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--muted);
+      border-bottom: 1px solid var(--dust);
+      padding-bottom: 0.2rem;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .btn-ghost:hover { color: var(--white); border-color: var(--amber); }
+
+    /* Vertical text on the right — like a film production note */
+    .hero-vertical {
+      position: absolute;
+      right: 3rem;
+      bottom: 5rem;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--dust);
+      writing-mode: vertical-rl;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .hero-vertical::before {
+      content: '';
+      width: 1px;
+      height: 60px;
+      background: var(--dust);
+    }
+
+    /* ═══════════════════════════════════════════════
+       SECTION UTILITY
+    ═══════════════════════════════════════════════ */
+    section {
+      padding: 7rem 3rem;
+      border-top: 1px solid var(--mid);
+    }
+
+    .sect-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .sect-eyebrow::after {
+      content: '';
+      flex: 0 0 40px;
+      height: 1px;
+      background: var(--amber);
+      opacity: 0.5;
+    }
+
+    .sect-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      letter-spacing: 0.02em;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 3.5rem;
+    }
+
+    /* ═══════════════════════════════════════════════
+       ABOUT
+       Two-column. Left: the statement. Right: the facts.
+       The statement is the story. Make it breathe.
+    ═══════════════════════════════════════════════ */
+    .about-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 6rem;
       align-items: start;
     }
-    .contact-desc {
-      font-size: 1rem;
-      color: rgba(247,245,240,0.55);
-      line-height: 1.8;
+
+    .about-statement {
+      font-size: 1.15rem;
+      line-height: 1.9;
+      color: var(--warm);
     }
-    .contact-links { display: flex; flex-direction: column; gap: 1.2rem; }
-    .contact-link {
+
+    .about-statement p { margin-bottom: 1.4rem; }
+    .about-statement p:last-child { margin-bottom: 0; }
+
+    .about-statement strong {
+      color: var(--white);
+      font-weight: 500;
+    }
+
+    .about-statement em {
+      color: var(--amber);
+      font-style: italic;
+    }
+
+    .about-facts {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .fact-row {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 1rem;
+      padding: 1.2rem 0;
+      border-bottom: 1px solid var(--mid);
+      align-items: baseline;
+    }
+
+    .fact-row:first-child { border-top: 1px solid var(--mid); }
+
+    .fact-label {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--dust);
+    }
+
+    .fact-value {
+      font-size: 0.95rem;
+      color: var(--warm);
+    }
+
+    /* ═══════════════════════════════════════════════
+       PROJECTS
+       Each project is a "scene" — it has a number,
+       a title, a log line, a stack, and an arrow.
+       Hover reveals more detail and slides left.
+       NOT a card grid. Cards are lazy.
+    ═══════════════════════════════════════════════ */
+    #projects { background: var(--dark); }
+
+    .project-item {
+      display: grid;
+      grid-template-columns: 3.5rem 1fr auto;
+      gap: 2rem;
+      padding: 2.4rem 0;
+      border-bottom: 1px solid var(--mid);
+      text-decoration: none;
+      color: inherit;
+      align-items: start;
+      transition: padding-left 0.3s ease;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .project-item:first-child { border-top: 1px solid var(--mid); }
+
+    .project-item:hover { padding-left: 1rem; }
+
+    .proj-num {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      color: var(--mid);
+      padding-top: 0.2rem;
+      transition: color 0.3s;
+    }
+
+    .project-item:hover .proj-num { color: var(--amber); }
+
+    .proj-body {}
+
+    .proj-header {
+      display: flex;
+      align-items: baseline;
+      gap: 1.2rem;
+      margin-bottom: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .proj-title {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      letter-spacing: 0.03em;
+      color: var(--white);
+      line-height: 1;
+      transition: color 0.3s;
+    }
+
+    .project-item:hover .proj-title { color: var(--amber); }
+
+    .proj-status {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--red);
+      border: 1px solid var(--red);
+      padding: 0.15rem 0.5rem;
+      opacity: 0.8;
+    }
+
+    .proj-status.live { color: #4caf50; border-color: #4caf50; }
+
+    .proj-logline {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 1rem;
+      max-width: 640px;
+    }
+
+    .proj-stack {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .stack-pill {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--dust);
+      border: 1px solid var(--mid);
+      padding: 0.2rem 0.6rem;
+      transition: border-color 0.3s, color 0.3s;
+    }
+
+    .project-item:hover .stack-pill {
+      border-color: var(--amber);
+      color: var(--amber);
+    }
+
+    .proj-arrow {
+      font-size: 1.4rem;
+      color: var(--mid);
+      align-self: center;
+      transition: color 0.3s, transform 0.3s;
+    }
+
+    .project-item:hover .proj-arrow {
+      color: var(--amber);
+      transform: translate(4px, -4px);
+    }
+
+    /* ═══════════════════════════════════════════════
+       SKILLS
+       Not a skills bar. Skills bars are meaningless.
+       This is a grid of categories — what you know,
+       what you're building toward, and what you're obsessed with.
+    ═══════════════════════════════════════════════ */
+    .skills-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0;
+      border: 1px solid var(--mid);
+    }
+
+    .skill-group {
+      padding: 2.4rem;
+      border-right: 1px solid var(--mid);
+    }
+
+    .skill-group:last-child { border-right: none; }
+
+    .skill-group-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 1.4rem;
+    }
+
+    .skill-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+
+    .skill-list li {
+      font-size: 1rem;
+      color: var(--warm);
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .skill-list li::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 4px;
+      background: var(--amber);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ═══════════════════════════════════════════════
+       CONTACT
+       Dark on dark. Very little. Your email is the CTA.
+       The noise and the silence is the design.
+    ═══════════════════════════════════════════════ */
+    #contact {
+      background: var(--black);
+      min-height: 70vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .contact-headline {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      line-height: 0.95;
+      color: var(--white);
+      letter-spacing: 0.01em;
+      margin-bottom: 1.5rem;
+    }
+
+    .contact-headline span { color: var(--amber); }
+
+    .contact-sub {
+      font-size: 1rem;
+      color: var(--muted);
+      font-style: italic;
+      max-width: 480px;
+      margin-bottom: 2.5rem;
+    }
+
+    .contact-channels {
+      display: flex;
+      gap: 2.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .channel-link {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--muted);
+      border-bottom: 1px solid var(--dust);
+      padding-bottom: 0.2rem;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .channel-link:hover { color: var(--amber); border-color: var(--amber); }
+
+    /* ═══════════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════════ */
+    footer {
+      padding: 1.2rem 3rem;
+      border-top: 1px solid var(--mid);
+      background: var(--black);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1.2rem 0;
-      border-bottom: 1px solid rgba(247,245,240,0.1);
-      text-decoration: none;
-      color: var(--bg);
-      font-size: 1rem;
-      transition: all 0.2s;
-    }
-    .contact-link:hover { padding-left: 0.8rem; color: var(--accent); }
-    .contact-link .arrow { font-size: 1.2rem; opacity: 0.4; }
-
-    /* ── FOOTER ── */
-    footer {
-      padding: 1.5rem 3rem;
-      background: var(--ink);
-      border-top: 1px solid rgba(247,245,240,0.08);
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.78rem;
-      color: rgba(247,245,240,0.3);
-      letter-spacing: 0.04em;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      color: var(--dust);
     }
 
-    /* ── ANIMATIONS ── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
+    /* ═══════════════════════════════════════════════
+       SCROLL REVEAL
+    ═══════════════════════════════════════════════ */
     .reveal {
       opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
+      transform: translateY(28px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
     }
+
     .reveal.visible {
       opacity: 1;
       transform: translateY(0);
     }
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 768px) {
-      nav { padding: 1.2rem 1.5rem; }
-      .nav-links { gap: 1.4rem; }
-      section { padding: 4rem 1.5rem; }
-      #hero { padding: 0 1.5rem 4rem; }
-      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-      .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-      .hero-scroll { display: none; }
-      footer { flex-direction: column; gap: 0.4rem; }
-      .project-item { grid-template-columns: auto 1fr; }
-      .proj-tags { display: none; }
+    /* ═══════════════════════════════════════════════
+       KEYFRAMES
+    ═══════════════════════════════════════════════ */
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ═══════════════════════════════════════════════
+       RESPONSIVE
+       Mobile is not an afterthought — it's equally
+       important since recruiters check on phones.
+    ═══════════════════════════════════════════════ */
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; } /* add a hamburger if you want */
+      section { padding: 5rem 1.5rem; }
+      #hero { padding: 6rem 1.5rem 4rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .skills-layout { grid-template-columns: 1fr; }
+      .skill-group { border-right: none; border-bottom: 1px solid var(--mid); }
+      .skill-group:last-child { border-bottom: none; }
+      .project-item { grid-template-columns: 2.5rem 1fr; }
+      .proj-arrow { display: none; }
+      footer { flex-direction: column; gap: 0.3rem; text-align: center; }
+      .hero-frame-count { display: none; }
+      .hero-vertical { display: none; }
     }
   </style>
 </head>
 <body>
 
+  <!--
+    FILM LEADER INTRO
+    SVG countdown circle — plays once, then gets out of the way.
+    If you find it annoying after a week, set animation-delay to 0s
+    and leaderFade delay to 0.1s — it'll disappear instantly.
+    The option to have it is the point.
+  -->
+  <div id="film-leader" aria-hidden="true">
+    <svg width="200" height="200" viewBox="0 0 200 200">
+      <circle cx="100" cy="100" r="90" class="leader-circle"/>
+      <!-- Crosshair lines — film registration marks -->
+      <line x1="100" y1="10" x2="100" y2="40" stroke="#3a3834" stroke-width="1"/>
+      <line x1="100" y1="160" x2="100" y2="190" stroke="#3a3834" stroke-width="1"/>
+      <line x1="10" y1="100" x2="40" y2="100" stroke="#3a3834" stroke-width="1"/>
+      <line x1="160" y1="100" x2="190" y2="100" stroke="#3a3834" stroke-width="1"/>
+      <circle cx="100" cy="100" r="4" fill="var(--amber)"/>
+      <text x="100" y="100" class="leader-count">3</text>
+    </svg>
+  </div>
+
   <!-- NAV -->
   <nav>
-    <div class="nav-logo">Swagot</div>
+    <div class="nav-logo">S<span>.</span>SAIKIA</div>
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
-      <li><a href="#projects">Projects</a></li>
+      <li><a href="#projects">Work</a></li>
       <li><a href="#skills">Skills</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
   </nav>
 
-  <!-- HERO -->
+  <!-- ── HERO ─────────────────────────────────── -->
   <section id="hero">
-    <p class="hero-eyebrow">IT Student · Builder · Creator</p>
-    <h1 class="hero-name">Swagot<br><em>Saikia</em></h1>
-    <p class="hero-tagline">I build things at the intersection of technology, art, and ideas. Currently studying Information Technology — always working on something.</p>
-    <div class="hero-scroll">Scroll</div>
+
+    <!-- Frame counter — top right, like a camera display -->
+    <div class="hero-frame-count">
+      <span class="counter">001</span>
+      <span>FRAME</span>
+    </div>
+
+    <div>
+      <p class="hero-label">Tech Auteur — IT Student — Builder</p>
+
+      <!--
+        HEADLINE STRATEGY:
+        "I build things that think in frames."
+        - "build things" = developer signal
+        - "think" = AI/intelligence signal
+        - "in frames" = cinema/photography signal
+        All three of your identities in 8 words.
+        The italic "frames" carries the entire personality.
+      -->
+      <h1 class="hero-headline">
+        I build things<br>
+        that think in<br>
+        <span class="amber italic">frames.</span>
+      </h1>
+
+      <p class="hero-sub">
+        IT student. Camera operator. Code writer. Somewhere between a director's cut and a pull request — I build at the intersection of technology, storytelling, and visual craft.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#projects" class="btn-primary">See My Work</a>
+        <a href="#contact" class="btn-ghost">Get in Touch</a>
+      </div>
+    </div>
+
+    <div class="hero-vertical">Scroll to Explore</div>
   </section>
 
-  <!-- ABOUT -->
+  <!-- ── ABOUT ─────────────────────────────────── -->
   <section id="about">
-    <p class="section-label reveal">About</p>
+    <p class="sect-eyebrow reveal">About</p>
     <div class="about-grid">
-      <div class="about-meta reveal">
-        <div class="about-stat">
-          <span>Currently</span>
-          <strong>B.Sc. Information Technology</strong>
+
+      <!--
+        ABOUT TEXT STRATEGY:
+        Don't list your skills here. That's what the skills section is for.
+        Tell a STORY. What drives you? What's the through-line?
+        The paragraph about "neither a pure engineer nor a pure artist" is
+        the most honest thing on this page — and honesty stands out.
+      -->
+      <div class="about-statement reveal">
+        <p>
+          I'm Swagot — a 20-year-old from Assam studying Information Technology,
+          but that's a thin description of what I actually am. I'm the person who
+          gets <strong>equally excited about a shot composition and a clean algorithm.</strong>
+        </p>
+        <p>
+          My orbit: AI, filmmaking, photography, robotics, animation, and the politics
+          that shape all of it. I shoot on a <em>Canon EOS 1500D</em> and I think in
+          frames — whether I'm writing code or walking a street looking for a shot.
+        </p>
+        <p>
+          I'm neither a pure engineer nor a pure artist. I'm building the space between.
+          Every project I make lives at that intersection — and that's where I intend to stay.
+        </p>
+        <p>
+          I'm at an early stage, and I know it. This portfolio is a <em>live document</em> of the work I'm doing to close the gap between what I imagine and what I can ship.
+        </p>
+      </div>
+
+      <div class="about-facts reveal">
+        <div class="fact-row">
+          <span class="fact-label">Currently</span>
+          <span class="fact-value">B.Sc. Information Technology, 2nd Year</span>
         </div>
-        <div class="about-stat">
-          <span>Interests</span>
-          <strong>AI · Film · Photography · Robotics</strong>
+        <div class="fact-row">
+          <span class="fact-label">Based in</span>
+          <span class="fact-value">Guwahati, Assam, India</span>
         </div>
-        <div class="about-stat">
-          <span>Camera</span>
-          <strong>Canon EOS 1500D</strong>
+        <div class="fact-row">
+          <span class="fact-label">Camera</span>
+          <span class="fact-value">Canon EOS 1500D + 18–55mm kit</span>
         </div>
-        <div class="about-stat">
-          <span>Based in</span>
-          <strong>India</strong>
+        <div class="fact-row">
+          <span class="fact-label">Disciplines</span>
+          <span class="fact-value">Landscape · Street · Portrait · Abstract</span>
+        </div>
+        <div class="fact-row">
+          <span class="fact-label">Building toward</span>
+          <span class="fact-value">AI × Cinema × Visual Technology</span>
+        </div>
+        <div class="fact-row">
+          <span class="fact-label">Status</span>
+          <span class="fact-value">Open to collaborations & internships</span>
         </div>
       </div>
-      <div class="about-text reveal">
-        <p>I'm Swagot — an IT student with a wide orbit of curiosity. I move between code, cameras, and concepts without apology.</p>
-        <p>My interests span AI, filmmaking, photography, hacking, robotics, and the politics that shape the world around all of it. I believe that the best builders understand both technology and the human systems it exists within.</p>
-        <p>I'm at an early stage — figuring out which of the things I love deserves the deepest focus. This portfolio is a live document of that process.</p>
-      </div>
+
     </div>
   </section>
 
-  <!-- PROJECTS -->
+  <!-- ── PROJECTS ─────────────────────────────── -->
   <section id="projects">
-    <p class="section-label reveal">Projects</p>
-    <h2 class="section-title reveal">Things I've Built</h2>
-    <div class="projects-list reveal">
+    <p class="sect-eyebrow reveal">Work</p>
+    <h2 class="sect-title reveal">Things I've Directed</h2>
 
-      <a href="https://swagot-saikia.github.io/Photography/" target="_blank" class="project-item">
-        <span class="proj-num">01</span>
-        <div class="proj-info">
-          <div class="proj-title">Photography Portfolio</div>
-          <div class="proj-desc">A curated visual archive — landscape, street, portrait, and abstract photography shot on a Canon EOS 1500D.</div>
+    <!--
+      PROJECT 1: CINÉMA ORACLE (REAL — YOU BUILT THIS)
+      Write it as a case study, not a feature list.
+      What problem? What decision? What did you learn?
+    -->
+    <a href="#" class="project-item reveal" target="_blank">
+      <span class="proj-num">01</span>
+      <div class="proj-body">
+        <div class="proj-header">
+          <span class="proj-title">Cinéma Oracle</span>
+          <span class="proj-status live">Live</span>
         </div>
-        <div class="proj-tags">
-          <span class="tag">Photography</span>
-          <span class="tag">HTML / CSS</span>
-          <span class="tag">Creative</span>
+        <p class="proj-logline">
+          An AI-powered film recommendation engine driven by mood and vibe, not genre. You don't say "thriller" — you say "something that feels like 3am and a slow reveal." Claude reasons your input into a curated shortlist with actual critical context. Persistent watchlist, history, filters.
+        </p>
+        <div class="proj-stack">
+          <span class="stack-pill">React</span>
+          <span class="stack-pill">Claude API</span>
+          <span class="stack-pill">Artifact Storage API</span>
+          <span class="stack-pill">Vibe-based UX</span>
         </div>
-      </a>
-
-    </div>
-  </section>
-
-  <!-- SKILLS -->
-  <section id="skills">
-    <p class="section-label reveal">Skills</p>
-    <h2 class="section-title reveal">What I Work With</h2>
-    <div class="skills-grid reveal">
-      <div class="skill-cell"><span>Language</span><strong>Python</strong></div>
-      <div class="skill-cell"><span>Frontend</span><strong>HTML / CSS / JS</strong></div>
-      <div class="skill-cell"><span>Domain</span><strong>AI & Machine Learning</strong></div>
-      <div class="skill-cell"><span>Hardware</span><strong>Robotics</strong></div>
-      <div class="skill-cell"><span>Creative</span><strong>Photography</strong></div>
-      <div class="skill-cell"><span>Creative</span><strong>Filmmaking</strong></div>
-      <div class="skill-cell"><span>OS</span><strong>Windows / Linux</strong></div>
-      <div class="skill-cell"><span>Security</span><strong>Hacking & CTF</strong></div>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section id="contact">
-    <p class="section-label reveal">Contact</p>
-    <h2 class="section-title reveal">Let's Talk</h2>
-    <div class="contact-grid">
-      <p class="contact-desc reveal">Whether it's a project, a collaboration, or just a conversation worth having — reach out. I respond to interesting people.</p>
-      <div class="contact-links reveal">
-        <a href="exceptionalstudio211@gmail.com" class="contact-link">
-          Email <span class="arrow">↗</span>
-        </a>
-        <a href="https://github.com/Swagot-Saikia" class="contact-link" target="_blank">
-          GitHub <span class="arrow">↗</span>
-        </a>
-        <a href="https://www.linkedin.com/in/swagot-saikia-4441303b4/" class="contact-link" target="_blank">
-          LinkedIn <span class="arrow">↗</span>
-        </a>
       </div>
+      <span class="proj-arrow">↗</span>
+    </a>
+
+    <!--
+      PROJECT 2: PHOTOGRAPHY PORTFOLIO (REAL)
+    -->
+    <a href="https://swagot-saikia.github.io/Photography/" class="project-item reveal" target="_blank">
+      <span class="proj-num">02</span>
+      <div class="proj-body">
+        <div class="proj-header">
+          <span class="proj-title">Photography Archive</span>
+          <span class="proj-status live">Live</span>
+        </div>
+        <p class="proj-logline">
+          A curated visual archive shot across four disciplines — landscape, urban/street, portrait, and abstract. Dark, cinematic interface. Masonry gallery. Category filtering. Every image shot on the 1500D and edited in Lightroom/Darktable. Code and camera, one project.
+        </p>
+        <div class="proj-stack">
+          <span class="stack-pill">HTML / CSS / JS</span>
+          <span class="stack-pill">Masonry Layout</span>
+          <span class="stack-pill">Canon EOS 1500D</span>
+          <span class="stack-pill">Lightroom / Darktable</span>
+        </div>
+      </div>
+      <span class="proj-arrow">↗</span>
+    </a>
+
+    <!--
+      PROJECT 3: SHOT LOG (BUILD NEXT)
+      This is achievable in 2–3 weeks. Targets DSLR photographers — a very real niche.
+      Nobody is building for them. That specificity is your edge.
+    -->
+    <div class="project-item reveal" style="cursor:default;">
+      <span class="proj-num">03</span>
+      <div class="proj-body">
+        <div class="proj-header">
+          <span class="proj-title">Shot Log</span>
+          <span class="proj-status">In Progress</span>
+        </div>
+        <p class="proj-logline">
+          DSLR photographers take thousands of shots and lose context for all of them. Shot Log parses EXIF data from your RAW/JPEG files and auto-generates a structured shooting journal — location, focal length, aperture, light conditions, AI-generated field notes. For photographers who think, not just shoot.
+        </p>
+        <div class="proj-stack">
+          <span class="stack-pill">Vanilla JS</span>
+          <span class="stack-pill">ExifReader.js</span>
+          <span class="stack-pill">Claude API</span>
+          <span class="stack-pill">File API</span>
+        </div>
+      </div>
+      <span class="proj-arrow">↗</span>
+    </div>
+
+    <!--
+      PROJECT 4: NARRATIVE OS (BUILD AFTER)
+      Filmmakers don't have good AI tools yet. This targets them directly.
+      The "shot list from premise" angle is specific and useful.
+    -->
+    <div class="project-item reveal" style="cursor:default;">
+      <span class="proj-num">04</span>
+      <div class="proj-body">
+        <div class="proj-header">
+          <span class="proj-title">Narrative OS</span>
+          <span class="proj-status">Concept</span>
+        </div>
+        <p class="proj-logline">
+          An AI storyboarding assistant for early-stage filmmakers. Input a three-act premise and get back a structured shot list, suggested visual motifs, a color palette rationale, and a reference director style. Bridges the gap between having a story idea and knowing how to frame it.
+        </p>
+        <div class="proj-stack">
+          <span class="stack-pill">React</span>
+          <span class="stack-pill">Claude API</span>
+          <span class="stack-pill">TMDB API</span>
+          <span class="stack-pill">Film Theory UX</span>
+        </div>
+      </div>
+      <span class="proj-arrow">↗</span>
+    </div>
+
+  </section>
+
+  <!-- ── SKILLS ─────────────────────────────────── -->
+  <section id="skills">
+    <p class="sect-eyebrow reveal">Stack</p>
+    <h2 class="sect-title reveal">What I Work With</h2>
+
+    <div class="skills-layout reveal">
+
+      <div class="skill-group">
+        <p class="skill-group-label">Code & Tech</p>
+        <ul class="skill-list">
+          <li>Python</li>
+          <li>HTML / CSS / JavaScript</li>
+          <li>React</li>
+          <li>AI & LLM Integration</li>
+          <li>Linux & CLI</li>
+          <li>CTF / Security Concepts</li>
+        </ul>
+      </div>
+
+      <div class="skill-group">
+        <p class="skill-group-label">Visual & Creative</p>
+        <ul class="skill-list">
+          <li>Photography (4 disciplines)</li>
+          <li>Lightroom / Darktable</li>
+          <li>Cinematography fundamentals</li>
+          <li>Visual storytelling</li>
+          <li>UI / UX design</li>
+          <li>Film theory & criticism</li>
+        </ul>
+      </div>
+
+      <div class="skill-group">
+        <p class="skill-group-label">Currently Learning</p>
+        <ul class="skill-list">
+          <li>Robotics & embedded systems</li>
+          <li>Video editing & post-production</li>
+          <li>Machine learning (applied)</li>
+          <li>Animation fundamentals</li>
+          <li>Prompt engineering & AI UX</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── CONTACT ─────────────────────────────────── -->
+  <section id="contact">
+    <p class="sect-eyebrow reveal">Contact</p>
+
+    <!--
+      The contact headline should be a call to action, not a heading.
+      "Let's Talk" is what every portfolio says.
+      "Something worth building?" is a filter — it tells the right people
+      you're serious, and the wrong people to move on.
+    -->
+    <h2 class="contact-headline reveal">
+      Something<br>worth <span>building?</span>
+    </h2>
+
+    <p class="contact-sub reveal">
+      I respond to interesting projects, honest collaborations, and people who take what they make seriously.
+    </p>
+
+    <div class="contact-channels reveal">
+      <a href="mailto:exceptionalstudio211@gmail.com" class="channel-link">Email</a>
+      <a href="https://github.com/Swagot-Saikia" target="_blank" class="channel-link">GitHub</a>
+      <a href="https://www.linkedin.com/in/swagot-saikia-4441303b4/" target="_blank" class="channel-link">LinkedIn</a>
+      <a href="https://swagot-saikia.github.io/Photography/" target="_blank" class="channel-link">Photography</a>
     </div>
   </section>
 
   <!-- FOOTER -->
   <footer>
     <span>© 2026 Swagot Saikia</span>
-    <span>Designed & built with intent.</span>
+    <span>FRAME 001 / SEQUENCE COMPLETE</span>
   </footer>
 
+  <!--
+    ════════════════════════════════════════════
+    JAVASCRIPT
+    Two jobs:
+    1. Scroll reveal — IntersectionObserver, no library needed
+    2. Staggered delay on grouped reveals
+    That's it. No bloat.
+    ════════════════════════════════════════════
+  -->
   <script>
-    // Intersection Observer for reveal animations
+    // Scroll reveal with staggered delay for siblings
     const reveals = document.querySelectorAll('.reveal');
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry, i) => {
         if (entry.isIntersecting) {
-          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+          // Stagger siblings by their index in the viewport batch
+          const delay = i * 100;
+          setTimeout(() => {
+            entry.target.classList.add('visible');
+          }, delay);
           observer.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.1 });
+    }, {
+      threshold: 0.12,
+      rootMargin: '0px 0px -40px 0px'
+    });
+
     reveals.forEach(el => observer.observe(el));
+
+    // Animated frame counter in hero
+    // Counts up from 000 to 001 — subtle film effect
+    const counter = document.querySelector('.hero-frame-count .counter');
+    if (counter) {
+      let n = 0;
+      const interval = setInterval(() => {
+        n++;
+        counter.textContent = String(n).padStart(3, '0');
+        if (n >= 24) clearInterval(interval); // 24 frames — film speed reference
+      }, 80);
+    }
+
+    // Nav active state on scroll
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    const navObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(link => {
+            link.style.color = '';
+            if (link.getAttribute('href') === '#' + entry.target.id) {
+              link.style.color = 'var(--amber)';
+            }
+          });
+        }
+      });
+    }, { threshold: 0.5 });
+
+    sections.forEach(s => navObserver.observe(s));
   </script>
 
 </body>
