@@ -44,7 +44,6 @@
 
     html {
       scroll-behavior: smooth;
-      /* Custom scrollbar — the details matter */
       scrollbar-width: thin;
       scrollbar-color: var(--dust) var(--black);
     }
@@ -55,20 +54,12 @@
       font-family: var(--font-body);
       line-height: 1.7;
       overflow-x: hidden;
-
-      /*
-        GRAIN OVERLAY: This single texture changes everything.
-        It makes the dark background feel tactile, analog, filmic —
-        not like a dark mode bootstrap template.
-      */
       background-image:
         url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
     }
 
     /* ═══════════════════════════════════════════════
-       FILM LEADER — The animated intro
-       This plays once on load. It's 2 seconds and people
-       will remember it. That's the entire point.
+       FILM LEADER
     ═══════════════════════════════════════════════ */
     #film-leader {
       position: fixed;
@@ -79,7 +70,7 @@
       align-items: center;
       justify-content: center;
       animation: leaderFade 0.5s ease 1.8s forwards;
-      pointer-events: none; /* don't block interaction after fade */
+      pointer-events: none;
     }
 
     #film-leader svg {
@@ -125,9 +116,6 @@
       justify-content: space-between;
       align-items: center;
       padding: 1.2rem 3rem;
-
-      /* Subtle frosted glass — not the overdone blur everyone does,
-         but dark + barely blurred so it reads like a viewfinder */
       background: rgba(10,10,8,0.85);
       backdrop-filter: blur(8px);
       border-bottom: 1px solid var(--mid);
@@ -164,9 +152,6 @@
 
     /* ═══════════════════════════════════════════════
        HERO
-       The hero does one thing: it makes you stop.
-       Large display type, a positioning line, and negative space.
-       No gradient mesh. No blobs. No "hello world" bootstrap garbage.
     ═══════════════════════════════════════════════ */
     #hero {
       min-height: 100vh;
@@ -180,7 +165,6 @@
       overflow: hidden;
     }
 
-    /* Horizontal film strip lines — atmosphere, not decoration */
     #hero::before {
       content: '';
       position: absolute;
@@ -214,7 +198,6 @@
       animation: slideIn 0.6s ease forwards 2s;
     }
 
-    /* The counter at top-right of hero — like a frame counter */
     .hero-frame-count {
       position: absolute;
       top: 7rem;
@@ -237,12 +220,6 @@
       line-height: 1;
     }
 
-    /*
-      HEADLINE SIZE: clamp() so it's never too big or too small.
-      8rem on large screens is intentional — it should dominate.
-      First word in white, second in italic amber — that contrast
-      is your logo, your identity, your visual signature.
-    */
     .hero-headline {
       font-family: var(--font-display);
       font-size: clamp(4rem, 11vw, 9.5rem);
@@ -309,7 +286,6 @@
 
     .btn-ghost:hover { color: var(--white); border-color: var(--amber); }
 
-    /* Vertical text on the right — like a film production note */
     .hero-vertical {
       position: absolute;
       right: 3rem;
@@ -371,8 +347,6 @@
 
     /* ═══════════════════════════════════════════════
        ABOUT
-       Two-column. Left: the statement. Right: the facts.
-       The statement is the story. Make it breathe.
     ═══════════════════════════════════════════════ */
     .about-grid {
       display: grid;
@@ -432,10 +406,6 @@
 
     /* ═══════════════════════════════════════════════
        PROJECTS
-       Each project is a "scene" — it has a number,
-       a title, a log line, a stack, and an arrow.
-       Hover reveals more detail and slides left.
-       NOT a card grid. Cards are lazy.
     ═══════════════════════════════════════════════ */
     #projects { background: var(--dark); }
 
@@ -545,9 +515,6 @@
 
     /* ═══════════════════════════════════════════════
        SKILLS
-       Not a skills bar. Skills bars are meaningless.
-       This is a grid of categories — what you know,
-       what you're building toward, and what you're obsessed with.
     ═══════════════════════════════════════════════ */
     .skills-layout {
       display: grid;
@@ -599,8 +566,6 @@
 
     /* ═══════════════════════════════════════════════
        CONTACT
-       Dark on dark. Very little. Your email is the CTA.
-       The noise and the silence is the design.
     ═══════════════════════════════════════════════ */
     #contact {
       background: var(--black);
@@ -690,12 +655,10 @@
 
     /* ═══════════════════════════════════════════════
        RESPONSIVE
-       Mobile is not an afterthought — it's equally
-       important since recruiters check on phones.
     ═══════════════════════════════════════════════ */
     @media (max-width: 900px) {
       nav { padding: 1rem 1.5rem; }
-      .nav-links { display: none; } /* add a hamburger if you want */
+      .nav-links { display: none; }
       section { padding: 5rem 1.5rem; }
       #hero { padding: 6rem 1.5rem 4rem; }
       .about-grid { grid-template-columns: 1fr; gap: 3rem; }
@@ -712,17 +675,9 @@
 </head>
 <body>
 
-  <!--
-    FILM LEADER INTRO
-    SVG countdown circle — plays once, then gets out of the way.
-    If you find it annoying after a week, set animation-delay to 0s
-    and leaderFade delay to 0.1s — it'll disappear instantly.
-    The option to have it is the point.
-  -->
   <div id="film-leader" aria-hidden="true">
     <svg width="200" height="200" viewBox="0 0 200 200">
       <circle cx="100" cy="100" r="90" class="leader-circle"/>
-      <!-- Crosshair lines — film registration marks -->
       <line x1="100" y1="10" x2="100" y2="40" stroke="#3a3834" stroke-width="1"/>
       <line x1="100" y1="160" x2="100" y2="190" stroke="#3a3834" stroke-width="1"/>
       <line x1="10" y1="100" x2="40" y2="100" stroke="#3a3834" stroke-width="1"/>
@@ -746,7 +701,6 @@
   <!-- ── HERO ─────────────────────────────────── -->
   <section id="hero">
 
-    <!-- Frame counter — top right, like a camera display -->
     <div class="hero-frame-count">
       <span class="counter">001</span>
       <span>FRAME</span>
@@ -755,15 +709,6 @@
     <div>
       <p class="hero-label">Tech Auteur — IT Student — Builder</p>
 
-      <!--
-        HEADLINE STRATEGY:
-        "I build things that think in frames."
-        - "build things" = developer signal
-        - "think" = AI/intelligence signal
-        - "in frames" = cinema/photography signal
-        All three of your identities in 8 words.
-        The italic "frames" carries the entire personality.
-      -->
       <h1 class="hero-headline">
         I build things<br>
         that think in<br>
@@ -788,13 +733,6 @@
     <p class="sect-eyebrow reveal">About</p>
     <div class="about-grid">
 
-      <!--
-        ABOUT TEXT STRATEGY:
-        Don't list your skills here. That's what the skills section is for.
-        Tell a STORY. What drives you? What's the through-line?
-        The paragraph about "neither a pure engineer nor a pure artist" is
-        the most honest thing on this page — and honesty stands out.
-      -->
       <div class="about-statement reveal">
         <p>
           I'm Swagot — a 20-year-old from Assam studying Information Technology,
@@ -851,19 +789,17 @@
     <h2 class="sect-title reveal">Things I've Directed</h2>
 
     <!--
-      PROJECT 1: CINÉMA ORACLE (REAL — YOU BUILT THIS)
-      Write it as a case study, not a feature list.
-      What problem? What decision? What did you learn?
+      PROJECT 1: THE REEL ORACLE — updated name & URL from live site
     -->
-    <a href="https://swagot-saikia.github.io/Cinema/A" class="project-item reveal" target="_blank">
+    <a href="https://swagot-saikia.github.io/Cinema/" class="project-item reveal" target="_blank">
       <span class="proj-num">01</span>
       <div class="proj-body">
         <div class="proj-header">
-          <span class="proj-title">Cinéma Oracle</span>
+          <span class="proj-title">The Reel Oracle</span>
           <span class="proj-status live">Live</span>
         </div>
         <p class="proj-logline">
-          An AI-powered film recommendation engine driven by mood and vibe, not genre. You don't say "thriller" — you say "something that feels like 3am and a slow reveal." Claude reasons your input into a curated shortlist with actual critical context. Persistent watchlist, history, filters.
+          An AI-powered film recommendation engine driven by mood and vibe, not genre. You don't say "thriller" — you say "something that feels like 3am and a slow reveal." The Oracle reasons your input into a curated shortlist with actual critical context. Persistent watchlist, history, mood filters, era sliders.
         </p>
         <div class="proj-stack">
           <span class="stack-pill">React</span>
@@ -876,7 +812,7 @@
     </a>
 
     <!--
-      PROJECT 2: PHOTOGRAPHY PORTFOLIO (REAL)
+      PROJECT 2: PHOTOGRAPHY PORTFOLIO
     -->
     <a href="https://swagot-saikia.github.io/Photography/" class="project-item reveal" target="_blank">
       <span class="proj-num">02</span>
@@ -899,9 +835,7 @@
     </a>
 
     <!--
-      PROJECT 3: SHOT LOG (BUILD NEXT)
-      This is achievable in 2–3 weeks. Targets DSLR photographers — a very real niche.
-      Nobody is building for them. That specificity is your edge.
+      PROJECT 3: SHOT LOG
     -->
     <div class="project-item reveal" style="cursor:default;">
       <span class="proj-num">03</span>
@@ -924,9 +858,7 @@
     </div>
 
     <!--
-      PROJECT 4: NARRATIVE OS (BUILD AFTER)
-      Filmmakers don't have good AI tools yet. This targets them directly.
-      The "shot list from premise" angle is specific and useful.
+      PROJECT 4: NARRATIVE OS
     -->
     <div class="project-item reveal" style="cursor:default;">
       <span class="proj-num">04</span>
@@ -999,12 +931,6 @@
   <section id="contact">
     <p class="sect-eyebrow reveal">Contact</p>
 
-    <!--
-      The contact headline should be a call to action, not a heading.
-      "Let's Talk" is what every portfolio says.
-      "Something worth building?" is a filter — it tells the right people
-      you're serious, and the wrong people to move on.
-    -->
     <h2 class="contact-headline reveal">
       Something<br>worth <span>building?</span>
     </h2>
@@ -1027,15 +953,6 @@
     <span>FRAME 001 / SEQUENCE COMPLETE</span>
   </footer>
 
-  <!--
-    ════════════════════════════════════════════
-    JAVASCRIPT
-    Two jobs:
-    1. Scroll reveal — IntersectionObserver, no library needed
-    2. Staggered delay on grouped reveals
-    That's it. No bloat.
-    ════════════════════════════════════════════
-  -->
   <script>
     // Scroll reveal with staggered delay for siblings
     const reveals = document.querySelectorAll('.reveal');
@@ -1043,7 +960,6 @@
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry, i) => {
         if (entry.isIntersecting) {
-          // Stagger siblings by their index in the viewport batch
           const delay = i * 100;
           setTimeout(() => {
             entry.target.classList.add('visible');
@@ -1059,14 +975,13 @@
     reveals.forEach(el => observer.observe(el));
 
     // Animated frame counter in hero
-    // Counts up from 000 to 001 — subtle film effect
     const counter = document.querySelector('.hero-frame-count .counter');
     if (counter) {
       let n = 0;
       const interval = setInterval(() => {
         n++;
         counter.textContent = String(n).padStart(3, '0');
-        if (n >= 24) clearInterval(interval); // 24 frames — film speed reference
+        if (n >= 24) clearInterval(interval);
       }, 80);
     }
 
